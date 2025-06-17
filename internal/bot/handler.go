@@ -14,6 +14,7 @@ import (
 	"tg-bot/internal/services"
 	"tg-bot/internal/utils"
 	// resty "resty.dev/v3"
+	"net/http" 
 )
 
 type BotApp struct {
@@ -115,9 +116,20 @@ func InitBot( botToken string, location *time.Location, storage reminders.Storag
 	return app, nil
 }
 
-// Start запускает Long Polling
-func ( app *BotApp ) StartBot() {
+func (app *BotApp) StartLongPolling() {
 	app.bot.Start()
+}
+
+// Start запускает Long Polling
+func (app *BotApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    var upd tele.Update
+    if err := json.NewDecoder(r.Body).Decode(&upd); err != nil {
+        http.Error(w, "bad request", http.StatusBadRequest)
+        return
+    }
+    // Telebot сам разошлёт апдейт всем зарегистрированным хендлерам
+    app.bot.ProcessUpdate(upd)
+    w.WriteHeader(http.StatusOK)
 }
 
 // registerHandlers настраивает все команды и колбеки

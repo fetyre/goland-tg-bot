@@ -63,5 +63,19 @@ func main() {
 
 	// === 4. Запуск Telebot (Long Polling) ===
 	log.Println("Бот запущен, ожидаем обновления...")
-	botApp.StartBot()
+	app, err := bot.InitBot(
+		cfg.BotToken,
+		cfg.Location,
+		remStorage,
+		weatherSvc,
+		currencySvc,
+		utils,
+	)
+
+	if err != nil {
+		panic(err)         // Vercel покажет stack-trace в логах
+	}
+
+	log.Println("Bot started in long-polling mode...")
+	app.StartLongPolling()
 }
