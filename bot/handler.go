@@ -3,6 +3,7 @@ package bot
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"strings"
 	"time"
@@ -122,15 +123,21 @@ func (app *BotApp) StartLongPolling() {
 
 // Start запускает Long Polling
 func (app *BotApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    body, err := io.ReadAll(r.Body)
+    if err != nil {
+        http.Error(w, "read body error", http.StatusInternalServerError)
+        return
+    }
     var upd tele.Update
-    if err := json.NewDecoder(r.Body).Decode(&upd); err != nil {
+    if err := json.Unmarshal(body, &upd); err != nil {
+        log.Printf("❌ Failed to unmarshal update: %v\nBody: %s\n", err, string(body))
         http.Error(w, "bad request", http.StatusBadRequest)
         return
     }
-    // Telebot сам разошлёт апдейт всем зарегистрированным хендлерам
     app.bot.ProcessUpdate(upd)
     w.WriteHeader(http.StatusOK)
 }
+
 
 // registerHandlers настраивает все команды и колбеки
 func ( app *BotApp ) registerHandlers() {
