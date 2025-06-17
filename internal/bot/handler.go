@@ -8,13 +8,13 @@ import (
 	"time"
 
 	// "github.com/robfig/cron/v3"
+	"github.com/fetyre/goland-tg-bot/internal/reminders"
+	"github.com/fetyre/goland-tg-bot/internal/services"
+	"github.com/fetyre/goland-tg-bot/internal/utils"
 	tele "gopkg.in/telebot.v4"
 
-	"tg-bot/internal/reminders"
-	"tg-bot/internal/services"
-	"tg-bot/internal/utils"
 	// resty "resty.dev/v3"
-	"net/http" 
+	"net/http"
 )
 
 type BotApp struct {

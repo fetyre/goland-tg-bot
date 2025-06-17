@@ -2,24 +2,21 @@
 package handler
 
 import (
-	"net/http"
-	"os"
-	"time"
 	"log"
+	"net/http"
 
-	"github.com/joho/godotenv" 
-	"tg-bot/internal/bot"        // путь, который уже есть в ваших import'ах
-	"tg-bot/internal/reminders"
-	"tg-bot/internal/services"
-	"tg-bot/internal/utils"
-	"tg-bot/internal/config" 
+	"github.com/fetyre/goland-tg-bot/internal/bot"
+	"github.com/fetyre/goland-tg-bot/internal/config"
+	"github.com/fetyre/goland-tg-bot/internal/reminders"
+	"github.com/fetyre/goland-tg-bot/internal/services"
+	"github.com/fetyre/goland-tg-bot/internal/utils"
+	"github.com/joho/godotenv"
 )
 
 // глобальный экземпляр приложения – инициализируется на cold-start
 var app *bot.BotApp
 
 func init() {
-	loc, _ := time.LoadLocation("Europe/Vilnius")
 
 	if err := godotenv.Load(); err != nil {
 		log.Println("Warning: .env file not found or failed to load, assuming environment vars are set manually")

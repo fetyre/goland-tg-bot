@@ -1,4 +1,4 @@
-module tg-bot
+module github.com/fetyre/goland-tg-bot
 
 go 1.22.6
 

@@ -4,12 +4,12 @@ package main
 import (
 	"log"
 
-	"github.com/joho/godotenv" 
-	"tg-bot/internal/bot"     // пакет с handler'ами
-	"tg-bot/internal/config"  // пакет для загрузки конфигурации
-	"tg-bot/internal/reminders" // in-memory хранилище напоминаний
-	"tg-bot/internal/services" // пакеты для API (погода, курс)
-	"tg-bot/internal/utils"
+	"github.com/fetyre/goland-tg-bot/internal/bot" // пакет с handler'ами
+	"github.com/fetyre/goland-tg-bot/internal/config"
+	"github.com/fetyre/goland-tg-bot/internal/reminders"
+	"github.com/fetyre/goland-tg-bot/internal/services"
+	"github.com/fetyre/goland-tg-bot/internal/utils"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -63,19 +63,5 @@ func main() {
 
 	// === 4. Запуск Telebot (Long Polling) ===
 	log.Println("Бот запущен, ожидаем обновления...")
-	app, err := bot.InitBot(
-		cfg.BotToken,
-		cfg.Location,
-		remStorage,
-		weatherSvc,
-		currencySvc,
-		utils,
-	)
-
-	if err != nil {
-		panic(err)         // Vercel покажет stack-trace в логах
-	}
-
-	log.Println("Bot started in long-polling mode...")
-	app.StartLongPolling()
+	botApp.StartLongPolling()
 }
