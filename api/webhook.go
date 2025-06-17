@@ -55,6 +55,6 @@ func init() {
 }
 
 // Handle – единственная точка входа Vercel-функции
-func Handle(w http.ResponseWriter, r *http.Request) {
+func Handler(w http.ResponseWriter, r *http.Request) {
 	app.ServeHTTP(w, r)   // метод, который мы добавили в BotApp
 }
