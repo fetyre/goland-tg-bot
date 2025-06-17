@@ -28,9 +28,12 @@ func NewWeatherService(apiKey string, loc *time.Location) *WeatherService {
 }
 
 // Forecast возвращает описание погоды (строка) и температуру (°C) для заданного города
-func (s *WeatherService) GetWeather(lat string, lon string) (map[string]interface{}, error) {
+func (s *WeatherService) GetWeather(lat string, lon string, exclude string, units string) ([]byte, error) {
+	if units == "" {
+		units = "metric"
+	}
 
-	today := time.Now().Format(time.DateOnly)
+	today := time.Now().Format( time.DateOnly )
 
 	if today != s.day {
 		s.requestCount = 0
@@ -42,15 +45,14 @@ func (s *WeatherService) GetWeather(lat string, lon string) (map[string]interfac
 	}
 	s.requestCount++
 
-	var result map[string]interface{}
 	url := "https://api.openweathermap.org/data/3.0/onecall"
-	res, err := s.client.R().SetQueryParam( "lat", lat ).SetQueryParam( "lon", lat ).SetQueryParam( "appid", s.apiKey ).SetQueryParam( "appid", s.apiKey ).SetQueryParam("exclude", "current,minutely,hourly,alerts").SetQueryParam( "lang","ru" ).SetResult(&result).Get( url )
-	 if err != nil {
-        return nil, fmt.Errorf("ошибка выполнения запроса: %w", err)
-    }
-    if res.IsError() {
-        return nil, fmt.Errorf("API вернул статус %s", res.Status())
-    }
+	res, err := s.client.R().SetQueryParam( "lat", lat ).SetQueryParam( "lon", lat ).SetQueryParam( "appid", s.apiKey ).SetQueryParam( "appid", s.apiKey ).SetQueryParam("exclude", "minutely,hourly,alerts").SetQueryParam("units", units).SetQueryParam( "lang","ru" ).Get( url )
+	if err != nil {
+		return nil, fmt.Errorf("ошибка выполнения запроса: %w", err)
+	}
+	if res.IsError() {
+		return nil, fmt.Errorf("API вернул статус %s", res.Status())
+	}
 
-	return  result, nil
+	return res.Bytes(), nil
 }

@@ -9,6 +9,7 @@ import (
 	"tg-bot/internal/config"  // пакет для загрузки конфигурации
 	"tg-bot/internal/reminders" // in-memory хранилище напоминаний
 	"tg-bot/internal/services" // пакеты для API (погода, курс)
+	"tg-bot/internal/utils"
 )
 
 func main() {
@@ -37,6 +38,8 @@ func main() {
 	//      Заменить на БД: internal/reminders/storage.go
 	remStorage := reminders.NewMemoryStorage()
 
+	utils := utils.NewUtilsService()
+
 	// 2.2. Клиент OpenWeatherMap
 	weatherSvc := services.NewWeatherService(cfg.OpenWeatherAPIKey, cfg.Location)
 
@@ -44,7 +47,7 @@ func main() {
 	currencySvc := services.NewCurrencyService()
 
 	// 2.4. Инициализация Telebot с передачей зависимостей в handler-слой
-	botApp, err := bot.InitBot(cfg.BotToken, cfg.Location, remStorage, weatherSvc, currencySvc)
+	botApp, err := bot.InitBot(cfg.BotToken, cfg.Location, remStorage, weatherSvc, currencySvc, utils)
 	if err != nil {
 		log.Fatalf("Ошибка при инициализации BotApp: %v", err)
 	}
