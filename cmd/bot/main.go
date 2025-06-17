@@ -4,11 +4,11 @@ package main
 import (
 	"log"
 
-	"github.com/fetyre/goland-tg-bot/internal/bot" // пакет с handler'ами
-	"github.com/fetyre/goland-tg-bot/internal/config"
-	"github.com/fetyre/goland-tg-bot/internal/reminders"
-	"github.com/fetyre/goland-tg-bot/internal/services"
-	"github.com/fetyre/goland-tg-bot/internal/utils"
+	"github.com/fetyre/goland-tg-bot/bot" // пакет с handler'ами
+	"github.com/fetyre/goland-tg-bot/config"
+	"github.com/fetyre/goland-tg-bot/reminders"
+	"github.com/fetyre/goland-tg-bot/services"
+	"github.com/fetyre/goland-tg-bot/utils"
 	"github.com/joho/godotenv"
 )
 

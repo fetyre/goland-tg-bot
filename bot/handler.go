@@ -8,9 +8,9 @@ import (
 	"time"
 
 	// "github.com/robfig/cron/v3"
-	"github.com/fetyre/goland-tg-bot/internal/reminders"
-	"github.com/fetyre/goland-tg-bot/internal/services"
-	"github.com/fetyre/goland-tg-bot/internal/utils"
+	"github.com/fetyre/goland-tg-bot/reminders"
+	"github.com/fetyre/goland-tg-bot/services"
+	"github.com/fetyre/goland-tg-bot/utils"
 	tele "gopkg.in/telebot.v4"
 
 	// resty "resty.dev/v3"
