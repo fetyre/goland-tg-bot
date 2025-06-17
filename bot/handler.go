@@ -125,12 +125,15 @@ func (app *BotApp) StartLongPolling() {
 func (app *BotApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     body, err := io.ReadAll(r.Body)
     if err != nil {
-        http.Error(w, "read body error", http.StatusInternalServerError)
+        log.Printf("❌ ReadAll error: %v", err)
+        http.Error(w, "read error", http.StatusInternalServerError)
         return
     }
+    log.Printf("📥 Webhook body: %s", string(body))
+
     var upd tele.Update
     if err := json.Unmarshal(body, &upd); err != nil {
-        log.Printf("❌ Failed to unmarshal update: %v\nBody: %s\n", err, string(body))
+        log.Printf("❌ Unmarshal error: %v", err)
         http.Error(w, "bad request", http.StatusBadRequest)
         return
     }
