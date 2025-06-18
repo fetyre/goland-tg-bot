@@ -46,7 +46,7 @@ func (s *WeatherService) GetWeather(lat string, lon string, exclude string, unit
 	s.requestCount++
 
 	url := "https://api.openweathermap.org/data/3.0/onecall"
-	res, err := s.client.R().SetQueryParam( "lat", lat ).SetQueryParam( "lon", lat ).SetQueryParam( "appid", s.apiKey ).SetQueryParam( "appid", s.apiKey ).SetQueryParam("exclude", "minutely,hourly,alerts").SetQueryParam("units", units).SetQueryParam( "lang","ru" ).Get( url )
+	res, err := s.client.R().SetQueryParam( "lat", lat ).SetQueryParam( "lon", lon ).SetQueryParam( "appid", s.apiKey ).SetQueryParam( "appid", s.apiKey ).SetQueryParam("exclude", "minutely,hourly,alerts").SetQueryParam("units", units).SetQueryParam( "lang","ru" ).Get( url )
 	if err != nil {
 		return nil, fmt.Errorf("ошибка выполнения запроса: %w", err)
 	}

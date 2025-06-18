@@ -236,8 +236,7 @@ func ( app *BotApp ) registerHandlers() {
 
 		apiRes, err := app.weatherSvc.GetWeather("55.139235", "27.6845787", "", "")
     if err != nil {
-        c.Send( err )
-        return nil
+      return c.Send( err.Error() )
     }
 		var fullRes oneDailyWeatherRes
 		if err := json.Unmarshal(apiRes, &fullRes); err != nil {
