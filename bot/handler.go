@@ -234,7 +234,9 @@ func ( app *BotApp ) registerHandlers() {
 
 	app.bot.Handle( &weatherCurrentDayBtn, func(c tele.Context) error {
 
+		log.Println("🔥 handler УЗНАТЬ ПОГОДУ НА ДЕНЬ вызван")
 		apiRes, err := app.weatherSvc.GetWeather("55.139235", "27.6845787", "", "")
+		log.Println("ответ получил")
     if err != nil {
       return c.Send( err.Error() )
     }
