@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 	"fmt"
+	"log"
 	"time"
 
 	resty "resty.dev/v3"
@@ -29,6 +30,7 @@ func NewWeatherService(apiKey string, loc *time.Location) *WeatherService {
 
 // Forecast возвращает описание погоды (строка) и температуру (°C) для заданного города
 func (s *WeatherService) GetWeather(lat string, lon string, exclude string, units string) ([]byte, error) {
+	log.Println( "Start get weather" )
 	if units == "" {
 		units = "metric"
 	}
@@ -41,6 +43,7 @@ func (s *WeatherService) GetWeather(lat string, lon string, exclude string, unit
 	}
 
 	if s.requestCount >= maxDaily {
+		log.Println( "Daily limit reached" )
 		return nil, errors.New("достигнут дневной лимит запросов (999)")
 	}
 	s.requestCount++
@@ -48,11 +51,14 @@ func (s *WeatherService) GetWeather(lat string, lon string, exclude string, unit
 	url := "https://api.openweathermap.org/data/3.0/onecall"
 	res, err := s.client.R().SetQueryParam( "lat", lat ).SetQueryParam( "lon", lon ).SetQueryParam( "appid", s.apiKey ).SetQueryParam( "appid", s.apiKey ).SetQueryParam("exclude", "minutely,hourly,alerts").SetQueryParam("units", units).SetQueryParam( "lang","ru" ).Get( url )
 	if err != nil {
+		log.Fatalf( "Error http get req for weather info, err: %v", err )
 		return nil, fmt.Errorf("ошибка выполнения запроса: %w", err)
 	}
 	if res.IsError() {
-		return nil, fmt.Errorf("API вернул статус %s", res.Status())
+		log.Fatalf( "Http error get weather, err: %s", res.Status() )
+		return nil, fmt.Errorf( "API вернул статус %s", res.Status() )
 	}
 
+	log.Println( "End get weathe, OK!" )
 	return res.Bytes(), nil
 }
