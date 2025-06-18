@@ -24,7 +24,7 @@ func NewWeatherService(apiKey string, loc *time.Location) *WeatherService {
 	return &WeatherService{
 		apiKey:   apiKey,
 		location: loc,
-		client: resty.New().SetTimeout( 5 * time.Second ).SetRetryCount( 1 ),
+		client: resty.New().SetTimeout( 10 * time.Second ).SetRetryCount( 1 ),
 	}
 }
 
@@ -48,18 +48,8 @@ func (s *WeatherService) GetWeather(lat string, lon string, exclude string, unit
 	}
 	s.requestCount++
 
-	rrres, err := s.client.R().
-    Get("https://httpbin.org/get")
-	log.Println("🔗 → тестовый запрос к httpbin.org")
-if err != nil {
-    log.Printf("❌ тестовый запрос упал: %v", err)
-} else {
-    log.Printf("🔗 ← тестовый ответ httpbin: %v", rrres.StatusCode())
-}
-
-
 	url := "https://api.openweathermap.org/data/3.0/onecall"
-	log.Println( "wearher: send get requests for info, key: %v", s.apiKey )
+	log.Println( "wearher: send get requests for info" )
 	res, err := s.client.R().SetQueryParam( "lat", lat ).SetQueryParam( "lon", lon ).SetQueryParam( "appid", s.apiKey ).SetQueryParam("exclude", "minutely,hourly,alerts").SetQueryParam("units", units).SetQueryParam( "lang","ru" ).Get( url )
 	log.Println( "wearher: successfully end requests for info" )
 	if err != nil {
